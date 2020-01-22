@@ -6,6 +6,7 @@ var xtend = require('xtend')
 var url = require('url')
 var mime = require('mime')
 var pump = require('pump')
+var shutdown = require('http-shutdown')
 
 var parseBlocklist = function (filename) {
   // TODO: support gzipped files
@@ -172,7 +173,8 @@ var createServer = function (e, opts) {
     socket.setTimeout(36000000)
   })
 
-  return server
+  // extend the server with 'shutdown' method
+  return shutdown(server)
 }
 
 module.exports = function (torrent, opts) {
